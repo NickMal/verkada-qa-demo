@@ -1,0 +1,26 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+.ruff_cache/
+
+# Secrets & local config
+.env
+.env.local
+
+# Playwright
+playwright-report/
+test-results/
+.playwright/
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
+*.swp
+
+# Agent context (planning files, not part of deliverable)
+.agent-context/
