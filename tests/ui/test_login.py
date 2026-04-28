@@ -2,8 +2,9 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
+import time
 from collections.abc import Callable
+from typing import TYPE_CHECKING
 
 from tests.ui.pages.login_page import LoginPage
 
@@ -16,6 +17,11 @@ def test_login_success(
     verkada_creds: VerkadaCreds,
     totp_code: Callable[[], str],
 ) -> None:
+    # Session-scoped login fixture has already consumed a TOTP code on suite
+    # startup. Wait past the 30s validity window so this test gets a fresh
+    # code (Verkada correctly rejects TOTP reuse per RFC 6238 §5.2).
+    time.sleep(31)
+
     login_page.goto()
     login_page.fill_email(verkada_creds.email)
     login_page.fill_password(verkada_creds.password)

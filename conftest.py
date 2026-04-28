@@ -8,7 +8,7 @@ from collections.abc import Callable, Iterator
 import pyotp
 import pytest
 from dotenv import load_dotenv
-from playwright.sync_api import Page, sync_playwright
+from playwright.sync_api import Page, Playwright, sync_playwright
 from pydantic import BaseModel
 
 load_dotenv()
@@ -38,17 +38,28 @@ def verkada_creds() -> VerkadaCreds:
     return VerkadaCreds(**required)  # type: ignore[arg-type]
 
 
+@pytest.fixture(scope="session")
+def session_playwright() -> Iterator[Playwright]:
+    # Single Playwright instance per pytest session. sync_playwright owns its
+    # asyncio loop; spinning up a second instance while one is alive raises
+    # "Sync API inside the asyncio loop", so all browser fixtures share this.
+    pw = sync_playwright().start()
+    try:
+        yield pw
+    finally:
+        pw.stop()
+
+
 @pytest.fixture
-def playwright_page() -> Iterator[Page]:
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
-        context = browser.new_context()
-        page = context.new_page()
-        try:
-            yield page
-        finally:
-            context.close()
-            browser.close()
+def playwright_page(session_playwright: Playwright) -> Iterator[Page]:
+    browser = session_playwright.chromium.launch(headless=False)
+    context = browser.new_context()
+    page = context.new_page()
+    try:
+        yield page
+    finally:
+        context.close()
+        browser.close()
 
 
 @pytest.fixture
