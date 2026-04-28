@@ -1,0 +1,25 @@
+[project]
+name = "verkada-qa-demo"
+version = "0.1.0"
+description = "Verkada QA demo: Playwright UI suite against Command + FastAPI mock server."
+requires-python = ">=3.12"
+dependencies = [
+    "pytest==8.3.4",
+    "pytest-asyncio==0.25.2",
+    "playwright==1.49.1",
+    "httpx==0.28.1",
+    "pydantic==2.10.5",
+    "fastapi==0.115.6",
+    "uvicorn==0.34.0",
+    "python-dotenv==1.0.1",
+    "pyotp==2.9.0",
+    "ruff>=0.9,<1.0",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
