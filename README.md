@@ -19,6 +19,14 @@ pytest tests/
 
 Expected: 8 tests pass in ~80 seconds.
 
+> **Note on credentials:** UI tests require a Verkada Command account (email, password, TOTP secret, org URL) in `.env`. To run only the mock API suite without credentials:
+>
+> ```bash
+> pytest tests/mock_api/
+> ```
+>
+> Expected: 3 tests pass in under 100ms.
+
 ## What's tested
 
 ### UI suite (5 tests, Playwright + Chromium against real Verkada Command)
