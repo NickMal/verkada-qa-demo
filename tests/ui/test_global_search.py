@@ -20,7 +20,7 @@ def test_global_search_input_accepts_query(authenticated_page: Page) -> None:
     users_url = f"{origin.scheme}://{origin.netloc}/admin/users"
     authenticated_page.goto(users_url)
 
-    # confirmed 2025-04-27
+    # confirmed 2026-04-27
     search_input = authenticated_page.get_by_placeholder("Search...")
     search_input.fill("test query")
 
