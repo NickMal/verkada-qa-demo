@@ -1,4 +1,4 @@
-"""UI test: successful login to Verkada Command with TOTP."""
+"""UI tests: successful login to Verkada Command with TOTP, and invalid-password rejection."""
 
 from __future__ import annotations
 
@@ -22,3 +22,15 @@ def test_login_success(
     login_page.submit_credentials()
     login_page.fill_totp(totp_code())
     assert login_page.is_logged_in() is True
+
+
+def test_login_invalid_password(
+    login_page: LoginPage,
+    verkada_creds: VerkadaCreds,
+) -> None:
+    login_page.goto()
+    login_page.fill_email(verkada_creds.email)
+    login_page.fill_password("wrong-password-123")
+    login_page.submit_credentials()
+    assert login_page.is_credentials_error_visible() is True
+    assert login_page.is_logged_in() is False

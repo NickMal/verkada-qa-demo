@@ -39,6 +39,16 @@ class LoginPage:
         # confirmed 2025-04-27
         self._page.get_by_test_id("Account.Login.Password.Submit").click()
 
+    def is_credentials_error_visible(self) -> bool:
+        # confirmed 2025-04-27
+        try:
+            self._page.get_by_text("Sorry, please check your").wait_for(
+                state="visible", timeout=5_000
+            )
+            return True
+        except PlaywrightTimeoutError:
+            return False
+
     def fill_totp(self, code: str) -> None:
         if len(code) != 6 or not code.isdigit():
             raise ValueError(f"TOTP code must be 6 numeric digits, got {code!r}")
